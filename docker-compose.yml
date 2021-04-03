@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+    app:
+        build: .docker/php
+        container_name: metup-php
+        volumes:
+        - ./app:/var/www   
+
+    web:
+        build: .docker/nginx
+        container_name: metup-nginx
+        ports:
+        - 8080:80
+        volumes:
+        - ./app/:/var/www
+        - .docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+
+    mysql:
+        image: mysql:5.7
+        container_name: metup-mysql
+        volumes:
+        - .docker/mysqldata:/var/lib/mysql
+        ports:
+        - 33007:3306
+        environment: 
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=laravel
